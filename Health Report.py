@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import requests
 import time
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from pyvirtualdisplay import Display
 from selenium.webdriver.support.ui import Select
