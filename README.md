@@ -26,4 +26,6 @@ yum install xvfb
 ```
 5. 根据自己所需调试代码及DEBUG即可。
 # 邮件效果
+![8(A`K0~2%~~_1U06WC 7}Y](https://user-images.githubusercontent.com/42563262/131002196-838b27c2-b068-4bc1-90bb-6628e34588ee.png)
+
 ![HG`S1}K(~3 5NYZLL4OKB}4](https://user-images.githubusercontent.com/42563262/130967581-f82889c1-5705-4206-963e-185252ca9c82.png)
