@@ -16,11 +16,11 @@ pip3 install selenium
 pip3 install pyvirtualdisplay
 ```
 4. 在终端(terminal)根目录下载安装第三方工具(xvfb)
-·Ubuntu系统
+- Ubuntu系统
 ```shell
 sudo apt-get install xvfb
 ```
-·centOS
+- centOS
 ```shell
 yum install xvfb
 ```
