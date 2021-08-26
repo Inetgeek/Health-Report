@@ -9,6 +9,14 @@ url = 'xxxxxx' #需要登陆的网页
 id = "xxxxxx" #你的学号
 key = "xxxxxx" #你的密码
 
+#捕获异常
+def NodeExists(xpath):
+   try:
+      driver.find_element_by_xpath(xpath)
+      return True
+   except:
+      return False
+
 def get_code(url):
     display = Display(visible=0, size=(800, 800))
     display.start()
@@ -18,9 +26,8 @@ def get_code(url):
     driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div[3]/div/form/p[1]/input').send_keys(id) #注入学号
     driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div[3]/div/form/p[2]/input[1]').send_keys(key) #注入密码
     driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/div/div[3]/div/form/p[5]/button').click() #点击登录按钮
-    time.sleep(15)
-    code = driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/span') #判断是否已经打过卡
-    if code: #打过卡则返回2
+    time.sleep(15) 
+    if NodeExists("/html/body/div[2]/div/div[1]/div[2]/div/span"): #判断是否已经打过卡，打过卡则返回2
         return 2
     else: #没打过卡则进行下一步填表操作
         Select(driver.find_element_by_xpath('/html/body/div[4]/form/div/div[2]/div[3]/div/div[1]/div[1]/table/tbody/tr[2]/td/div/table/tbody/tr[9]/td[2]/div/select')).select_by_value("35.5")#选择下拉列表35.5
