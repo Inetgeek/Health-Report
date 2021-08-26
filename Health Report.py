@@ -57,7 +57,7 @@ def sender_mail(): #构造并发送邮件
     for email_addrs in receiver_addrs:
         try:
             msg = multipart.MIMEMultipart()
-            msg['From'] = "DingDang"
+            msg['From'] = "InetGeek"
             msg['To'] = email_addrs
             msg['subject'] = header.Header(send_title, 'utf-8')
             msg.attach(text.MIMEText(send_content, 'html', 'utf-8'))
