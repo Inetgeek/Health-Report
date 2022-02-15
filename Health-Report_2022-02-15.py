@@ -6,13 +6,13 @@
 :date: 2022-02-15
 :lib_url: https://github.com/inetgeek
 
-:intro: 本代码是基于作者所在学校健康上报系统编写，若外校同学使用则在本代码基础上二次修改即可。本项目默认follower为有基础的coder，没有详细说明怎么具体使用该小项目，因此请用户根据import所导入的库进行安装、配置环境，此处给出简单教程:
-        - 运行环境：python 3.x及相应modules/packages(e.g. selenium/pyvirtualdisplay etc.)
-        - 浏览器环境：chrome-linux版
-        - 驱动：chromedriver-linux版
-        - 作为发送邮件的邮箱号 代码基于pop3/smtp的smtp.qq.com服务器编写(即qq邮箱)
-        收件邮箱若为多个，则在下方的['收件邮箱']列表里添加新的邮箱号即可，此处邮箱可以不为qq邮箱
-        可以根据自己的需求增加、删除及修改所注入的信息、栏目，比如温度此处写的为35.5，用户可更改为其他温度。使用时配置好参数表，在’‘或""内按照注释填写相关信息
+:intro: 本代码是基于作者所在学校健康上报系统编写，若外校同学使用则在本代码基础上二次修改即可。本项目默认follower为有基础的coder，没有详细说明怎么具体使用该小项目，因此请用户根据所import的库进行安装、配置环境，此处给出简单教程:
+        - + 运行环境：python 3.x及相应modules/packages(e.g. selenium/pyvirtualdisplay etc.)
+        - + 浏览器环境：chrome-linux版
+        - + 驱动：chromedriver-linux版
+        - 作为发送邮件的邮箱号 代码默认使用pop3/smtp的smtp.qq.com服务器(即qq邮箱)，也可以使用其他邮箱服务器如smtp.163.com，端口均为465(须pop3/smtp协议)
+        - 收件你的邮箱若想设置多个，则在下方的['收件邮箱']列表里添加新的邮箱号即可
+        - 可以根据自己的需求增加、删除及修改所注入的信息、栏目，比如温度此处写的为35.5，用户可更改为其他温度。使用时配置好参数表，在’‘或""内按照注释填写相关信息
 """
 
 import time
