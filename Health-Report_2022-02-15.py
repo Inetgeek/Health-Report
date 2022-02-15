@@ -5,7 +5,17 @@
 :code: Colyn
 :date: 2022-02-15
 :lib_url: https://github.com/inetgeek
+
+:intro: 本代码是基于作者所在学校健康上报系统编写，若外校同学使用则在本代码基础上二次修改即可。
+        本项目默认follower为有基础的coder，没有详细说明怎么具体使用该小项目，因此请用户
+        根据import所导入的库进行安装、配置环境，此处给出简单教程:
+        - 运行环境：python 3.x及相应module/package
+        -浏览器环境：chrome-linux版
+        -驱动：chromedriver-linux版
+        -作为发送邮件的邮箱号，代码基于pop3/smtp的smtp.qq.com服务器编写(即qq邮箱)
+        收件邮箱若为多个，则在下方的['收件邮箱']列表里添加新的邮箱号即可，此处邮箱可以不为qq邮箱
 """
+
 
 import time
 from selenium import webdriver
@@ -13,11 +23,11 @@ from pyvirtualdisplay import Display
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 
-# 正常请求页：http://xxxx.xxxx.edu.cn/xxx
+# 正常请求页rul: http://xxxx.xxxx.edu.cn/xxx # 此链接若为本校同学请联系作者获取
 
-url = '学校健康打卡表单链接'
+url = '学校健康打卡表单链接'  # 即正常请求页url
 uid = "学号"
-key = "密码"
+pwd = "密码"
 
 
 def get_code(url):
@@ -40,7 +50,7 @@ def get_code(url):
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(url)
     driver.find_element_by_xpath('//*[@id="username"]').send_keys(uid)
-    driver.find_element_by_xpath('//*[@id="password"]').send_keys(key)
+    driver.find_element_by_xpath('//*[@id="password"]').send_keys(pwd)
     driver.find_element_by_xpath('//*[@id="login_submit"]').click()
     time.sleep(5)
 
@@ -80,6 +90,7 @@ def get_code(url):
             # 按钮: 本人承诺以上填写内容均真实可靠！
             driver.find_element_by_xpath('//*[@id="V1_CTRL142"]').click()
             time.sleep(1)
+
             # 按钮: 确认填报
             driver.find_element_by_xpath('/html/body/div[4]/form/div/div[2]/div[3]/div/div[1]/div[3]/ul/li/a').click()
             time.sleep(1)
@@ -126,11 +137,11 @@ def getNowDate():
 def sender_mail():
     """
     发送状态邮件
-    邮箱服务器: stmp.qq.com
+    邮箱服务器: smtp.qq.com
     """
     smtp_Obj = smtplib.SMTP_SSL('smtp.qq.com', 465)
     sender_addrs = '发送邮箱号(必须是qq邮箱且开通pop3/smtp服务)'
-    password = "发送邮箱授权码(如上)"
+    password = "发送邮箱授权码(上述邮箱的授权码)"
     smtp_Obj.login(sender_addrs, password)
     receiver_addrs = ['收件邮箱']
     for email_addrs in receiver_addrs:
@@ -153,14 +164,15 @@ if __name__ == "__main__":
 
     send_title = "向“理”报平安打卡状态"
     send_head = '<p style="color:#507383">亲爱的主人：</p>'
-    content_0 = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">今日已上报，无需进行任何操作！</span></p>' + date
+    content_0 = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">今日已报，无需进行任何操作！</span></p>' + date
     content_1 = send_head + '<p style="font-size:34px;color:#5fa207;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡成功，无需进行任何操作！</span></p>' + date
-    content_2 = send_head + '<p style="font-size:34px;color:#ca1b0f;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡失败，请及时手动打卡！</span></p>' + date
+    content_2 = send_head + '<p style="font-size:34px;color:#ca1b0f;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡失败，设置失效！</span></p>' + date
+    content_3 = send_head + '<p style="font-size:34px;color:#ca1b0f;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡失败，未知原因！</span></p>' + date
 
     if status == 2:
         send_content = content_0
         sender_mail()
-        print("今日已上报，无需进行任何操作！")
+        print("今日已报，无需进行任何操作！")
     elif status == 1:
         send_content = content_1
         sender_mail()
@@ -170,6 +182,6 @@ if __name__ == "__main__":
         sender_mail()
         print("打卡失败，设置失效！")
     else:
-        send_content = content_2
+        send_content = content_3
         sender_mail()
         print("打卡失败，未知原因！")
