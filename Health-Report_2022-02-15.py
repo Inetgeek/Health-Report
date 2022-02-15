@@ -140,7 +140,7 @@ def getNowDate():
     """
     now_time = datetime.datetime.now()
     yes_time = now_time + datetime.timedelta(days=-0)
-    current_time = yes_time.strftime('%Y-%m-%d')
+    current_time = yes_time.strftime('%Y-%m-%d %A')
     return current_time
 
 
