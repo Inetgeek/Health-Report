@@ -127,9 +127,6 @@ def get_code(url, uid, pwd):
         driver.quit()
 
 
-# 获取填写状态码，具体说明见参数@param
-state = get_code(_url, _uid, _pwd)
-
 import smtplib
 from email import (header)
 from email.mime import (text, multipart)
@@ -199,6 +196,8 @@ if __name__ == "__main__":
     :func: main
     :return: 0
     """
+    # 获取填写状态码，具体说明见参数@param
+    state = get_code(_url, _uid, _pwd)
     setFormat()
 
     if state == 2:
