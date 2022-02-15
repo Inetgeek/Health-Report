@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 """
@@ -21,7 +21,7 @@ from pyvirtualdisplay import Display
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 
-# 正常请求页rul: http://xxxx.xxxx.edu.cn/xxx # 此链接若为本校同学请联系作者获取
+# 正常请求页url: http://xxxx.xxxx.edu.cn/xxx # 此链接若为本校同学请联系作者获取
 
 # ####################################### 参数表 #######################################
 # 学生参数设置
