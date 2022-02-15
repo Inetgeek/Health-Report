@@ -6,16 +6,14 @@
 :date: 2022-02-15
 :lib_url: https://github.com/inetgeek
 
-:intro: 本代码是基于作者所在学校健康上报系统编写，若外校同学使用则在本代码基础上二次修改即可。
-        本项目默认follower为有基础的coder，没有详细说明怎么具体使用该小项目，因此请用户
-        根据import所导入的库进行安装、配置环境，此处给出简单教程:
-        - 运行环境：python 3.x及相应module/package
-        -浏览器环境：chrome-linux版
-        -驱动：chromedriver-linux版
-        -作为发送邮件的邮箱号，代码基于pop3/smtp的smtp.qq.com服务器编写(即qq邮箱)
+:intro: 本代码是基于作者所在学校健康上报系统编写，若外校同学使用则在本代码基础上二次修改即可。本项目默认follower为有基础的coder，没有详细说明怎么具体使用该小项目，因此请用户根据import所导入的库进行安装、配置环境，此处给出简单教程:
+        - 运行环境：python 3.x及相应modules/packages(e.g. selenium/pyvirtualdisplay etc.)
+        - 浏览器环境：chrome-linux版
+        - 驱动：chromedriver-linux版
+        - 作为发送邮件的邮箱号 代码基于pop3/smtp的smtp.qq.com服务器编写(即qq邮箱)
         收件邮箱若为多个，则在下方的['收件邮箱']列表里添加新的邮箱号即可，此处邮箱可以不为qq邮箱
+        可以根据自己的需求增加、删除及修改所注入的信息、栏目，比如温度此处写的为35.5，用户可更改为其他温度
 """
-
 
 import time
 from selenium import webdriver
@@ -71,19 +69,19 @@ def get_code(url):
         try:
             time.sleep(2)
 
-            # 栏目: 填报时体温
+            # 栏目: 填报时体温，此处为35.5°
             Select(driver.find_element_by_xpath('//*[@id="V1_CTRL173"]')).select_by_value("35.5")
             time.sleep(1)
 
-            # 栏目: 最近一次核酸检测时间
+            # 栏目: 最近一次核酸检测时间，此处为2022-02-12
             driver.find_element_by_xpath('//*[@id="V1_CTRL212"]').send_keys("2022-02-12")
             time.sleep(1)
 
-            # 栏目: 所在地是否为中高风险地区？
+            # 栏目: 所在地是否为中高风险地区？此处选的是"否"
             driver.find_element_by_xpath('//*[@id="V1_CTRL167"]').click()
             time.sleep(1)
 
-            # 栏目: 离开南京时间（新生不填）
+            # 栏目: 离开南京时间（新生不填），此处为此处为2022-01-10
             driver.find_element_by_xpath('//*[@id="V1_CTRL83"]').send_keys("2022-01-10")
             time.sleep(1)
 
