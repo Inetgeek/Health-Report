@@ -96,7 +96,7 @@ def get_code(url, uid, pwd):
             driver.find_element_by_xpath('//*[@id="V1_CTRL167"]').click()
             time.sleep(1)
 
-            # 栏目: 离开南京时间（新生不填），此处为此处为2022-01-10
+            # 栏目: 离开南京时间（新生不填），此处为2022-01-10
             driver.find_element_by_xpath('//*[@id="V1_CTRL83"]').send_keys("2022-01-10")
             time.sleep(1)
 
