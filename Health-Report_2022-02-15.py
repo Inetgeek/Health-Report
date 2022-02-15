@@ -174,6 +174,9 @@ def sender_mail(email_title, email_content, **setEmail):
 
 
 # 发送信息参数
+date = '<span style="color:#FC5531">' + getNowDate() + '</span>'
+send_head = '<p style="color:#507383">亲爱的主人: </p>'
+state_info = ["今日已报，无需进行任何操作！", "打卡成功，无需进行任何操作！", "打卡失败，设置失效！", "打卡失败，未知原因！"]
 send_info = {
     'send_title': "向“理”报平安打卡状态",
     'send_content': ['', '', '', '']
@@ -186,9 +189,6 @@ def setFormat():
     :func: Send message parameters
     :return: None
     """
-    date = '<span style="color:#FC5531">' + getNowDate() + '</span>'
-    send_head = '<p style="color:#507383">亲爱的主人: </p>'
-    state_info = ["今日已报，无需进行任何操作！", "打卡成功，无需进行任何操作！", "打卡失败，设置失效！", "打卡失败，未知原因！"]
     for i in range(0, 4, 1):
         send_info['send_content'][i] = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; ' \
                              'z-index: 1; position: static;">{}</span></p>'.format(state_info[i]) + date
@@ -203,13 +203,13 @@ if __name__ == "__main__":
 
     if state == 2:
         sender_mail(send_info['send_title'], send_info['send_content'][0], **setEmail)
-        print("今日已报，无需进行任何操作！")
+        print(state_info[0])
     elif state == 1:
         sender_mail(send_info['send_title'], send_info['send_content'][1], **setEmail)
-        print("打卡成功，无需进行任何操作！")
+        print(state_info[1])
     elif state == 0:
         sender_mail(send_info['send_title'], send_info['send_content'][2], **setEmail)
-        print("打卡失败，设置失效！")
+        print(state_info[2])
     else:
         sender_mail(send_info['send_title'], send_info['send_content'][3], **setEmail)
-        print("打卡失败，未知原因！")
+        print(state_info[3])
