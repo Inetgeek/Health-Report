@@ -12,7 +12,7 @@
         - 驱动：chromedriver-linux版
         - 作为发送邮件的邮箱号 代码基于pop3/smtp的smtp.qq.com服务器编写(即qq邮箱)
         收件邮箱若为多个，则在下方的['收件邮箱']列表里添加新的邮箱号即可，此处邮箱可以不为qq邮箱
-        可以根据自己的需求增加、删除及修改所注入的信息、栏目，比如温度此处写的为35.5，用户可更改为其他温度
+        可以根据自己的需求增加、删除及修改所注入的信息、栏目，比如温度此处写的为35.5，用户可更改为其他温度。使用时配置好参数表，在’‘或""内按照注释填写相关信息
 """
 
 import time
@@ -23,14 +23,30 @@ from selenium.webdriver.chrome.options import Options
 
 # 正常请求页rul: http://xxxx.xxxx.edu.cn/xxx # 此链接若为本校同学请联系作者获取
 
-url = '学校健康打卡表单链接'  # 即正常请求页url
-uid = "学号"
-pwd = "密码"
+# #######################################参数表#######################################
+# 学生参数设置
+_url = ''  # 健康上报的链接, 即正常请求页url
+_uid = ''  # 学号
+_pwd = ''  # 密码
+
+# 邮箱参数设置
+setEmail = {
+    'server': "smtp.qq.com",  # 邮箱服务器，若用qq邮箱作为服务端(发送邮件的邮箱归属服务商)则为smtp.qq.com
+    'port': 465,  # 邮箱端口 DEFAULT: 465
+    'send_mail': "",  # 发送邮件的邮箱(开通pop3/smtp服务的邮箱, 作为发送端)
+    'recv_mail': [''],  # 收件邮箱, 列表里可填多个收件邮箱，用, 隔开
+    'lisence': "",  # 发送邮箱授权码(上述邮箱的授权码)
+    'sender': ""  # 发送者昵称
+}
 
 
-def get_code(url):
+# ########################################END########################################
+
+def get_code(url, uid, pwd):
     """
     开始进行爬取网页并注入信息
+    :param uid: Your uid
+    :param pwd: Your pwd
     :param url: target_url
     :return: state_code
     """
@@ -112,8 +128,8 @@ def get_code(url):
         driver.quit()
 
 
-# 获取填写状态码，具体说明见下方参数@param
-status = get_code(url)
+# 获取填写状态码，具体说明见参数@param
+status = get_code(_url, _uid, _pwd)
 
 import smtplib
 from email import (header)
@@ -132,54 +148,66 @@ def getNowDate():
     return current_time
 
 
-def sender_mail():
+def sender_mail(email_title, email_content, **setEmail):
     """
     发送状态邮件
-    邮箱服务器: smtp.qq.com
+    邮箱服务器: 例如 smtp.qq.com
+    端口 例如 465
+    :param email_title: The title of the email sent to
+    :param email_content: The content of the email sent to
+    :param setEmail: Email configuration parameters
+    :return: None
     """
-    smtp_Obj = smtplib.SMTP_SSL('smtp.qq.com', 465)
-    sender_addrs = '发送邮箱号(必须是qq邮箱且开通pop3/smtp服务)'
-    password = "发送邮箱授权码(上述邮箱的授权码)"
-    smtp_Obj.login(sender_addrs, password)
-    receiver_addrs = ['收件邮箱']
-    for email_addrs in receiver_addrs:
+    smtp_Obj = smtplib.SMTP_SSL(setEmail['server'], setEmail['port'])
+    smtp_Obj.login(setEmail['send_mail'], setEmail['lisence'])
+    for email_addrs in setEmail['recv_mail']:
         try:
             msg = multipart.MIMEMultipart()
-            msg['From'] = "发送人昵称"
+            msg['From'] = setEmail['sender']
             msg['To'] = email_addrs
-            msg['subject'] = header.Header(send_title, 'utf-8')
-            msg.attach(text.MIMEText(send_content, 'html', 'utf-8'))
-            smtp_Obj.sendmail(sender_addrs, email_addrs, msg.as_string())
+            msg['subject'] = header.Header(email_title, 'utf-8')
+            msg.attach(text.MIMEText(email_content, 'html', 'utf-8'))
+            smtp_Obj.sendmail(setEmail['send_mail'], email_addrs, msg.as_string())
         except Exception as e:
+            print(e)
             continue
     smtp_Obj.quit()
 
 
-Now_Date = getNowDate()
-date = '<span style="color:#FC5531">' + Now_Date + '</span>'
+# 发送信息参数
+send_info = {
+    'send_title': "向“理”报平安打卡状态",
+    'send_content': ['', '', '', '']
+}
+
+
+# 发送信息 内容 格式
+def sentFormat():
+    """
+    :func: Send message parameters
+    :return: None
+    """
+    date = '<span style="color:#FC5531">' + getNowDate() + '</span>'
+    send_head = '<p style="color:#507383">亲爱的主人: </p>'
+    status_info = ["今日已报，无需进行任何操作！", "打卡成功，无需进行任何操作！", "打卡失败，设置失效！", "打卡失败，未知原因！"]
+    for i in range(0, 4, 1):
+        send_info['send_content'][i] = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; ' \
+                             'z-index: 1; position: static;">{}</span></p>'.format(status_info[i]) + date
+
 
 if __name__ == "__main__":
 
-    send_title = "向“理”报平安打卡状态"
-    send_head = '<p style="color:#507383">亲爱的主人：</p>'
-    content_0 = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">今日已报，无需进行任何操作！</span></p>' + date
-    content_1 = send_head + '<p style="font-size:34px;color:#5fa207;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡成功，无需进行任何操作！</span></p>' + date
-    content_2 = send_head + '<p style="font-size:34px;color:#ca1b0f;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡失败，设置失效！</span></p>' + date
-    content_3 = send_head + '<p style="font-size:34px;color:#ca1b0f;"><span style="border-bottom: 1px dashed #ccc; z-index: 1; position: static;">打卡失败，未知原因！</span></p>' + date
+    sentFormat()
 
     if status == 2:
-        send_content = content_0
-        sender_mail()
+        sender_mail(send_info['send_title'], send_info['send_content'][0], **setEmail)
         print("今日已报，无需进行任何操作！")
     elif status == 1:
-        send_content = content_1
-        sender_mail()
+        sender_mail(send_info['send_title'], send_info['send_content'][1], **setEmail)
         print("打卡成功，无需进行任何操作！")
     elif status == 0:
-        send_content = content_2
-        sender_mail()
+        sender_mail(send_info['send_title'], send_info['send_content'][2], **setEmail)
         print("打卡失败，设置失效！")
     else:
-        send_content = content_3
-        sender_mail()
+        sender_mail(send_info['send_title'], send_info['send_content'][3], **setEmail)
         print("打卡失败，未知原因！")
