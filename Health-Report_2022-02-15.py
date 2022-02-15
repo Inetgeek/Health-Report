@@ -129,7 +129,7 @@ def get_code(url, uid, pwd):
 
 
 # 获取填写状态码，具体说明见参数@param
-status = get_code(_url, _uid, _pwd)
+state = get_code(_url, _uid, _pwd)
 
 import smtplib
 from email import (header)
@@ -182,30 +182,30 @@ send_info = {
 
 
 # 发送信息 内容 格式
-def sentFormat():
+def setFormat():
     """
     :func: Send message parameters
     :return: None
     """
     date = '<span style="color:#FC5531">' + getNowDate() + '</span>'
     send_head = '<p style="color:#507383">亲爱的主人: </p>'
-    status_info = ["今日已报，无需进行任何操作！", "打卡成功，无需进行任何操作！", "打卡失败，设置失效！", "打卡失败，未知原因！"]
+    state_info = ["今日已报，无需进行任何操作！", "打卡成功，无需进行任何操作！", "打卡失败，设置失效！", "打卡失败，未知原因！"]
     for i in range(0, 4, 1):
         send_info['send_content'][i] = send_head + '<p style="font-size:34px;color:#3095f1;"><span style="border-bottom: 1px dashed #ccc; ' \
-                             'z-index: 1; position: static;">{}</span></p>'.format(status_info[i]) + date
+                             'z-index: 1; position: static;">{}</span></p>'.format(state_info[i]) + date
 
 
 if __name__ == "__main__":
 
-    sentFormat()
+    setFormat()
 
-    if status == 2:
+    if state == 2:
         sender_mail(send_info['send_title'], send_info['send_content'][0], **setEmail)
         print("今日已报，无需进行任何操作！")
-    elif status == 1:
+    elif state == 1:
         sender_mail(send_info['send_title'], send_info['send_content'][1], **setEmail)
         print("打卡成功，无需进行任何操作！")
-    elif status == 0:
+    elif state == 0:
         sender_mail(send_info['send_title'], send_info['send_content'][2], **setEmail)
         print("打卡失败，设置失效！")
     else:
